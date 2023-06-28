@@ -1,10 +1,20 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const page = () => {
   const router = useRouter();
+  const session = useSession();
+
+  if (session.status === "loading") {
+    return <h2>Loading...</h2>;
+  }
+
+  if (session.status === "authenticated") {
+    router.push("/");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
