@@ -16,11 +16,13 @@ const Login = () => {
     router.push("/");
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const email = e.target[0].value;
     const password = e.target[1].value;
+
+    signIn("credentials", { email, password });
   };
 
   return (
