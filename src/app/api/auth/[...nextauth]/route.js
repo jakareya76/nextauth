@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -19,9 +18,20 @@ const handler = NextAuth({
         try {
           const user = await User.findOne({ email: credentials.email });
 
-          console.log(user);
+          if (user) {
+            const isPasswordCorrect = await bcrypt.compare(
+              credentials.password,
+              user.password
+            );
 
-          return new Response("Hello World");
+            if (isPasswordCorrect) {
+              return user;
+            } else {
+              throw new Error("Wrong Credentials!");
+            }
+          } else {
+            throw new Error("Wrong Credentials!");
+          }
         } catch (error) {
           console.log(error);
         }
